@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.cl-internal-b3fm6y {
+  display: none !important;
+}
+
+.cl-card {
+  border-radius: 10px !important;
+}
+
+.cl-formButtonPrimary {
+  background-color: black !important;
+  color: white !important;
+}

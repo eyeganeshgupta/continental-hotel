@@ -1,7 +1,7 @@
 import { UserButton } from "@clerk/nextjs";
 import { Button } from "antd";
 
-export default function Home() {
+export default async function Home() {
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <h1 className="text-3xl text-gray-500 font-bold uppercase">
