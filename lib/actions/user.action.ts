@@ -4,7 +4,7 @@ import User from "@/database/user.model";
 import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "../db";
 
-export async function createUser(userData: any) {
+export async function createUser(userData: CreateUserParams) {
   try {
     await connectToDatabase();
     const newUser = await User.create(userData);
