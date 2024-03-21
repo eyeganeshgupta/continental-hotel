@@ -4,6 +4,21 @@ import User from "@/database/user.model";
 import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "../db";
 
+export async function getUserById(params: any) {
+  try {
+    await connectToDatabase();
+
+    const { userId } = params;
+
+    const userFound = await User.findOne({ clerkUserId: userId });
+
+    return userFound;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
 export async function createUser(userData: CreateUserParams) {
   try {
     await connectToDatabase();
