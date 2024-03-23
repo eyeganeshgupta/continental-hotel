@@ -8,7 +8,7 @@ const Navbar = async () => {
   const user = await getUserById({ userId });
   // console.log(user);
   return (
-    <div className="px-20">
+    <div className="px-5 lg:px-20">
       <div className="flex justify-between items-center border border-t-0 border-solid">
         <div className="p-5 text-2xl font-bold border-0 border-r border-solid">
           Continental Hotel
