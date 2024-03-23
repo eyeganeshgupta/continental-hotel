@@ -54,7 +54,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, user }: any) => {
       name: "Hotels",
       icon: <Hotel size={iconSize} />,
       onClick: () => router.push("/admin/hotels"),
-      isActive: pathname === "/admin/hotels",
+      isActive: pathname.includes("/admin/hotels"),
     },
     {
       name: "Rooms",
