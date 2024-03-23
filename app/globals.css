@@ -93,3 +93,11 @@
     box-shadow: 0.2em -0.2em 0 0 currentcolor;
   }
 }
+
+.ant-form-item {
+  margin-bottom: 0px !important;
+}
+
+.ant-form-item-label {
+  padding: 0px !important;
+}
