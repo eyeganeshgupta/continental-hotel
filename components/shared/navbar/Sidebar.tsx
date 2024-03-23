@@ -1,3 +1,4 @@
+import { useAuth } from "@clerk/nextjs";
 import { Drawer } from "antd";
 import { BedDouble, GitGraph, Home, Hotel, List, User } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
@@ -5,6 +6,13 @@ import { usePathname, useRouter } from "next/navigation";
 const Sidebar = ({ showSidebar, setShowSidebar, user }: any) => {
   const router = useRouter();
   const pathname = usePathname();
+  const { signOut } = useAuth();
+
+  const onLogout = async () => {
+    await signOut();
+    setShowSidebar(false);
+    router.push("/sign-in");
+  };
 
   const iconSize = 18;
 
@@ -84,6 +92,13 @@ const Sidebar = ({ showSidebar, setShowSidebar, user }: any) => {
             </div>
           );
         })}
+
+        <span
+          className="text-center cursor-pointer text-red-500"
+          onClick={onLogout}
+        >
+          Logout
+        </span>
       </div>
     </Drawer>
   );
