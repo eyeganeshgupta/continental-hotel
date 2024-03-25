@@ -1,9 +1,9 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { addHotel, updateHotel } from "@/lib/actions/hotel.action";
 import { uploadImageToFirebaseAndReturnUrls } from "@/lib/image-upload";
 import { Button, Form, Input, Upload, message } from "antd";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -110,13 +110,13 @@ const HotelForm = ({
                 key={media + index}
                 className="p-3 flex flex-col items-center gap-5 border border-solid border-gray-200 rounded"
               >
-                <Image
+                <img
                   src={media}
                   alt="media"
-                  className="h-16 w-16 object-cover"
+                  className="h-16 w-17 object-cover"
                 />
                 <span
-                  className="text-gray-500 underline text-sm cursor-pointer"
+                  className="text-gray-500 text-sm cursor-pointer"
                   onClick={() => {
                     setExistingMedia(
                       existingMedia.filter((item: string, i: number) => {
@@ -125,7 +125,7 @@ const HotelForm = ({
                     );
                   }}
                 >
-                  Remove
+                  ❌
                 </span>
               </div>
             );
@@ -149,7 +149,7 @@ const HotelForm = ({
           Cancel
         </Button>
         <Button type="primary" htmlType="submit" loading={loading}>
-          Submit
+          {type === "add" ? "Add" : "Update"}
         </Button>
       </div>
     </Form>

@@ -53,12 +53,31 @@ export const updateHotel = async ({
 }) => {
   try {
     connectToDatabase();
+    await Hotel.findByIdAndUpdate(hotelId, payload);
     revalidatePath("/admin/hotels");
     return {
       success: true,
       message: "Hotel updated successfully!",
     };
   } catch (error: any) {
+    return {
+      success: false,
+      error: error?.message,
+    };
+  }
+};
+
+export const deleteHotel = async (hotelId: string) => {
+  try {
+    connectToDatabase();
+    await Hotel.findByIdAndDelete(hotelId);
+    revalidatePath("/admin/hotels");
+    return {
+      success: true,
+      message: "Hotel deleted successfully!",
+    };
+  } catch (error: any) {
+    console.log(error);
     return {
       success: false,
       error: error?.message,

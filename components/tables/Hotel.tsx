@@ -1,13 +1,36 @@
 "use client";
 
+import loading from "@/app/loading";
+import { deleteHotel } from "@/lib/actions/hotel.action";
 import { HotelType } from "@/lib/actions/shared.types";
-import { Table } from "antd";
+import { Table, message } from "antd";
 import dayjs from "dayjs";
 import { Edit, PlusSquare, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const HotelTable = ({ hotels }: { hotels: HotelType[] }) => {
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const onDelete = async (hotelId: string) => {
+    try {
+      setLoading(true);
+      const response = await deleteHotel(hotelId);
+
+      if (response.success) {
+        message.success(response.message);
+      }
+
+      if (!response.success) {
+        message.error(response.message);
+      }
+    } catch (error: any) {
+      message.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const columns = [
     {
@@ -48,7 +71,11 @@ const HotelTable = ({ hotels }: { hotels: HotelType[] }) => {
       render: (text: any, record: HotelType) => {
         return (
           <div className="flex gap-5 items-center">
-            <Trash2 size={18} className="cursor-pointer text-red-700" />
+            <Trash2
+              size={18}
+              className="cursor-pointer text-red-700"
+              onClick={() => onDelete(record._id)}
+            />
             <Edit
               size={18}
               className="cursor-pointer text-yellow-700"
@@ -62,7 +89,7 @@ const HotelTable = ({ hotels }: { hotels: HotelType[] }) => {
   ];
   return (
     <div>
-      <Table dataSource={hotels} columns={columns}></Table>
+      <Table loading={loading} dataSource={hotels} columns={columns}></Table>
     </div>
   );
 };

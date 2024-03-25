@@ -4,7 +4,8 @@ import { getHotelById } from "@/lib/actions/hotel.action";
 
 const EditHotelPage = async ({ params }: { params: { id: string } }) => {
   const hotelId = params.id;
-  const hotelDetails = await getHotelById(hotelId);
+  let hotelDetails = await getHotelById(hotelId);
+  hotelDetails = JSON.parse(JSON.stringify(hotelDetails));
   return (
     <div>
       <PageTitle title="Edit Hotel" />
