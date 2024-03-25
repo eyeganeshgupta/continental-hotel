@@ -4,8 +4,11 @@ import { HotelType } from "@/lib/actions/shared.types";
 import { Table } from "antd";
 import dayjs from "dayjs";
 import { Edit, PlusSquare, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const HotelTable = ({ hotels }: { hotels: HotelType[] }) => {
+  const router = useRouter();
+
   const columns = [
     {
       title: "Name",
@@ -46,7 +49,11 @@ const HotelTable = ({ hotels }: { hotels: HotelType[] }) => {
         return (
           <div className="flex gap-5 items-center">
             <Trash2 size={18} className="cursor-pointer text-red-700" />
-            <Edit size={18} className="cursor-pointer text-yellow-700" />
+            <Edit
+              size={18}
+              className="cursor-pointer text-yellow-700"
+              onClick={() => router.push(`/admin/hotels/edit/${record._id}`)}
+            />
             <PlusSquare size={18} className="cursor-pointer text-green-700" />
           </div>
         );

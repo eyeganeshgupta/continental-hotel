@@ -1,12 +1,18 @@
 "use client";
 
-import { addHotel } from "@/lib/actions/hotel.action";
+import { addHotel, updateHotel } from "@/lib/actions/hotel.action";
 import { uploadImageToFirebaseAndReturnUrls } from "@/lib/image-upload";
 import { Button, Form, Input, Upload, message } from "antd";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const HotelForm = ({ type = "add" }: { type: string }) => {
+const HotelForm = ({
+  type = "add",
+  initialData,
+}: {
+  type: string;
+  initialData?: any;
+}) => {
   const router = useRouter();
   const [uploadedFiles, setUploadedFiles] = useState([]) as any[];
   const [loading, setLoading] = useState(false);
@@ -16,13 +22,21 @@ const HotelForm = ({ type = "add" }: { type: string }) => {
       setLoading(true);
       values.media = await uploadImageToFirebaseAndReturnUrls(uploadedFiles);
       let response = null;
+
       if (type === "add") {
         response = await addHotel(values);
+      } else {
+        response = await updateHotel({
+          hotelId: initialData._id,
+          payload: values,
+        });
       }
+
       if (response?.success) {
-        message.success("Hotel added successfully!");
+        message.success(response.message);
         router.push("/admin/hotels");
       }
+
       if (!response?.success) {
         message.error(response?.error);
       }
@@ -38,6 +52,7 @@ const HotelForm = ({ type = "add" }: { type: string }) => {
       className="mt-5 grid grid-cols-3 gap-5"
       layout="vertical"
       onFinish={onFinish}
+      initialValues={initialData}
     >
       <Form.Item
         label="Hotel Name"
