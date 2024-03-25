@@ -3,6 +3,7 @@
 import { addHotel, updateHotel } from "@/lib/actions/hotel.action";
 import { uploadImageToFirebaseAndReturnUrls } from "@/lib/image-upload";
 import { Button, Form, Input, Upload, message } from "antd";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -16,11 +17,13 @@ const HotelForm = ({
   const router = useRouter();
   const [uploadedFiles, setUploadedFiles] = useState([]) as any[];
   const [loading, setLoading] = useState(false);
+  const [existingMedia, setExistingMedia] = useState(initialData?.media || []);
 
   const onFinish = async (values: any) => {
     try {
       setLoading(true);
-      values.media = await uploadImageToFirebaseAndReturnUrls(uploadedFiles);
+      const newUrls = await uploadImageToFirebaseAndReturnUrls(uploadedFiles);
+      values.media = [...existingMedia, ...newUrls];
       let response = null;
 
       if (type === "add") {
@@ -99,7 +102,36 @@ const HotelForm = ({
         <Input.TextArea placeholder="Address" />
       </Form.Item>
 
-      <div className="col-span-3">
+      <div className="col-span-3 flex gap-5">
+        <div className="flex gap-5">
+          {existingMedia.map((media: any, index: number) => {
+            return (
+              <div
+                key={media + index}
+                className="p-3 flex flex-col items-center gap-5 border border-solid border-gray-200 rounded"
+              >
+                <Image
+                  src={media}
+                  alt="media"
+                  className="h-16 w-16 object-cover"
+                />
+                <span
+                  className="text-gray-500 underline text-sm cursor-pointer"
+                  onClick={() => {
+                    setExistingMedia(
+                      existingMedia.filter((item: string, i: number) => {
+                        return i !== index;
+                      })
+                    );
+                  }}
+                >
+                  Remove
+                </span>
+              </div>
+            );
+          })}
+        </div>
+
         <Upload
           listType="picture-card"
           beforeUpload={(file) => {
