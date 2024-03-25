@@ -98,7 +98,9 @@ const HotelForm = ({ type = "add" }: { type: string }) => {
       </div>
 
       <div className="col-span-3 flex justify-end gap-5">
-        <Button disabled={loading}>Cancel</Button>
+        <Button disabled={loading} onClick={() => router.push("/admin/hotels")}>
+          Cancel
+        </Button>
         <Button type="primary" htmlType="submit" loading={loading}>
           Submit
         </Button>
