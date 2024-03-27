@@ -22,6 +22,12 @@ const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
               borderRadius: 3,
               colorBorder: "#ccc",
             },
+            Select: {
+              controlHeight: 42,
+              boxShadow: "none",
+              controlOutline: "none",
+              colorBorder: "#ccc",
+            },
           },
         }}
       >

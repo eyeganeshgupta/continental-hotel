@@ -60,7 +60,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, user }: any) => {
       name: "Rooms",
       icon: <BedDouble size={iconSize} />,
       onClick: () => router.push("/admin/rooms"),
-      isActive: pathname === "/admin/rooms",
+      isActive: pathname.includes("/admin/rooms"),
     },
     {
       name: "Reports",
