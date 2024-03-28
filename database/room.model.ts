@@ -1,10 +1,10 @@
-import mongoose, { Schema, model, models } from "mongoose";
+import { Schema, model, models } from "mongoose";
 
 const RoomSchema = new Schema(
   {
     hotel: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "hotels",
+      type: Schema.Types.ObjectId,
+      ref: "Hotel",
       required: true,
     },
     name: {

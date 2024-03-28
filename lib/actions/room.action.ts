@@ -1,5 +1,6 @@
 "use server";
 
+import Hotel from "@/database/hotel.model";
 import Room from "@/database/room.model";
 import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "../db";
@@ -18,7 +19,11 @@ export const getRoomById = async (RoomId: string) => {
 export const getAllRooms = async () => {
   try {
     connectToDatabase();
-    const response = await Room.find().sort({ createdAt: -1 });
+    const response = await Room.find().populate({
+      path: "hotel",
+      model: Hotel,
+      select: "_id name",
+    });
     return response;
   } catch (error) {
     console.log(error);

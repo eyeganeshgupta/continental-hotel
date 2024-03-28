@@ -30,3 +30,17 @@ export interface HotelType {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface RoomType {
+  _id: string;
+  name: string;
+  hotel: HotelType;
+  rentPerDay: number;
+  type: string;
+  roomNumber: number;
+  bedrooms: number;
+  amenities: string;
+  media: string[];
+  createdAt: string;
+  updatedAt: string;
+}
