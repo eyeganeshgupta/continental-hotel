@@ -8,7 +8,11 @@ import { connectToDatabase } from "../db";
 export const getRoomById = async (RoomId: string) => {
   try {
     connectToDatabase();
-    const response = await Room.findById(RoomId);
+    const response = await Room.findById(RoomId).populate({
+      path: "hotel",
+      model: Hotel,
+      select: "_id name",
+    });
     return response;
   } catch (error) {
     console.log(error);
