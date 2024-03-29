@@ -1,13 +1,15 @@
-import { auth } from "@clerk/nextjs";
+import RoomsData from "@/components/shared/RoomsData";
+import Spinner from "@/components/shared/Spinner";
+import { Suspense } from "react";
 
-export default async function Home() {
-  const { userId } = auth();
+const Home = ({ searchParams }: { searchParams: any }) => {
   return (
-    <div className="flex flex-col gap-5 p-5 items-center justify-center h-screen">
-      <h1 className="text-3xl text-gray-500 font-bold uppercase">
-        The Continental Hotel
-      </h1>
-      <h2>Clerk UserId: {userId ? userId : "guest"}</h2>
+    <div>
+      <Suspense fallback={<Spinner />}>
+        <RoomsData />
+      </Suspense>
     </div>
   );
-}
+};
+
+export default Home;

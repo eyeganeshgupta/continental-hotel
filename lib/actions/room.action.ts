@@ -19,11 +19,13 @@ export const getRoomById = async (RoomId: string) => {
 export const getAllRooms = async () => {
   try {
     connectToDatabase();
-    const response = await Room.find().populate({
-      path: "hotel",
-      model: Hotel,
-      select: "_id name",
-    });
+    const response = await Room.find()
+      .populate({
+        path: "hotel",
+        model: Hotel,
+        select: "_id name",
+      })
+      .sort({ createdAt: -1 });
     return response;
   } catch (error) {
     console.log(error);
