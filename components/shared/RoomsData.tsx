@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { getAllRooms } from "@/lib/actions/room.action";
 import { RoomType } from "@/lib/actions/shared.types";
-import { Link } from "lucide-react";
+import Link from "next/link";
 
 const RoomsData = async () => {
   const response = await getAllRooms();
