@@ -3,6 +3,7 @@
 import User from "@/database/user.model";
 import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "../db";
+import { CreateUserParams } from "./shared.types";
 
 export async function getUserById(params: any) {
   try {

@@ -1,3 +1,5 @@
+"use server";
+
 import Booking from "@/database/booking.model";
 import { connectToDatabase } from "../db";
 
