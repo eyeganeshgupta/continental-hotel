@@ -1,20 +1,20 @@
 "use client";
-
 import { checkRoomAvailability } from "@/lib/actions/booking.action";
+import { getStripeClientSecretKey } from "@/lib/actions/payment.action";
 import { RoomType } from "@/lib/actions/shared.types";
 import { Button, Form, Input, message } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 
-const Checkout = ({ room }: { room: RoomType }) => {
+function Checkout({ room }: { room: RoomType }) {
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [loading, setLoading] = useState(false);
   const [isAvailable, setIsAvailable] = useState(false);
-
-  useEffect(() => {
-    setIsAvailable(false);
-  }, [checkIn, checkOut]);
+  const [totalDays, setTotalDays] = useState(0);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [clientSecret, setClientSecret] = useState("");
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   const checkAvailability = async () => {
     try {
@@ -24,20 +24,43 @@ const Checkout = ({ room }: { room: RoomType }) => {
         reqCheckInDate: checkIn,
         reqCheckOutDate: checkOut,
       });
-
       if (response.success) {
         setIsAvailable(true);
         message.success("Room is available");
+        const totalDaysTemp = dayjs(checkOut).diff(dayjs(checkIn), "day");
+        setTotalDays(totalDaysTemp);
+        setTotalAmount(totalDaysTemp * room.rentPerDay);
       } else {
         setIsAvailable(false);
         message.error("Room is not available");
       }
     } catch (error: any) {
       message.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const onBookRoom = async () => {};
+  const onBookRoom = async () => {
+    try {
+      setLoading(true);
+      const response = await getStripeClientSecretKey({ amount: totalAmount });
+      if (response.success) {
+        setClientSecret(response.data);
+        setShowPaymentModal(true);
+      } else {
+        message.error(response.message);
+      }
+    } catch (error: any) {
+      message.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    setIsAvailable(false);
+  }, [checkIn, checkOut]);
 
   return (
     <div className="p-5 border border-gray-300 border-solid">
@@ -73,6 +96,14 @@ const Checkout = ({ room }: { room: RoomType }) => {
 
         {isAvailable && (
           <>
+            <div className="flex justify-between">
+              <span>Total Days</span>
+              <span>{totalDays}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Total Amount</span>
+              <span>{totalAmount}₹</span>
+            </div>
             <Button
               type="primary"
               className="w-full"
@@ -86,6 +117,6 @@ const Checkout = ({ room }: { room: RoomType }) => {
       </Form>
     </div>
   );
-};
+}
 
 export default Checkout;
