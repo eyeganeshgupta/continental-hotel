@@ -4,15 +4,21 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 export const getStripeClientSecretKey = async ({
   amount,
+  hotelName,
+  roomName,
 }: {
   amount: number;
+  hotelName: string;
+  roomName: string;
 }) => {
   try {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amount * 100,
-      currency: "inr",
-      description: "Continental Hotel - Room Booking Payment",
+      currency: "usd",
+      description: `${hotelName} - ${roomName}`,
     });
+
+    console.log({ paymentIntent });
 
     return {
       success: true,

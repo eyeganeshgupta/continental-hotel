@@ -2,9 +2,16 @@
 import { checkRoomAvailability } from "@/lib/actions/booking.action";
 import { getStripeClientSecretKey } from "@/lib/actions/payment.action";
 import { RoomType } from "@/lib/actions/shared.types";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 import { Button, Form, Input, message } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
+import PaymentModal from "./PaymentModal";
+
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+);
 
 function Checkout({ room }: { room: RoomType }) {
   const [checkIn, setCheckIn] = useState("");
@@ -19,7 +26,7 @@ function Checkout({ room }: { room: RoomType }) {
   const checkAvailability = async () => {
     try {
       setLoading(true);
-      const response = await checkRoomAvailability({
+      const response: any = await checkRoomAvailability({
         roomId: room._id,
         reqCheckInDate: checkIn,
         reqCheckOutDate: checkOut,
@@ -44,7 +51,11 @@ function Checkout({ room }: { room: RoomType }) {
   const onBookRoom = async () => {
     try {
       setLoading(true);
-      const response = await getStripeClientSecretKey({ amount: totalAmount });
+      const response = await getStripeClientSecretKey({
+        amount: totalAmount,
+        hotelName: room.hotel.name,
+        roomName: room.name,
+      });
       if (response.success) {
         setClientSecret(response.data);
         setShowPaymentModal(true);
@@ -115,6 +126,25 @@ function Checkout({ room }: { room: RoomType }) {
           </>
         )}
       </Form>
+
+      {showPaymentModal && clientSecret && (
+        <Elements
+          stripe={stripePromise}
+          options={{
+            clientSecret,
+          }}
+        >
+          <PaymentModal
+            room={room}
+            totalDays={totalDays}
+            totalAmount={totalAmount}
+            checkInDate={checkIn}
+            checkOutDate={checkOut}
+            showPaymentModal={showPaymentModal}
+            setShowPaymentModal={setShowPaymentModal}
+          />
+        </Elements>
+      )}
     </div>
   );
 }
