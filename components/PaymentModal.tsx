@@ -1,5 +1,6 @@
 "use client";
 
+import { bookRoom } from "@/lib/actions/booking.action";
 import { RoomType } from "@/lib/actions/shared.types";
 import {
   AddressElement,
@@ -54,6 +55,23 @@ function PaymentModal({
         message.error(result.error.message);
       } else {
         message.success("Payment successful");
+
+        const bookingPayload = {
+          hotel: room.hotel._id,
+          room: room._id,
+          checkInDate,
+          checkOutDate,
+          totalAmount,
+          totalDays,
+          paymentId: result.paymentIntent.id,
+        };
+
+        await bookRoom(bookingPayload);
+
+        message.success("Room booked successfully");
+
+        setShowPaymentModal(false);
+        router.push("/user/bookings");
       }
     } catch (error: any) {
       message.error(error.message);
@@ -87,7 +105,7 @@ function PaymentModal({
               Cancel
             </Button>
             <Button type="primary" htmlType="submit" loading={loading}>
-              Pay {totalAmount}
+              Pay {totalAmount} ₹
             </Button>
           </div>
         </form>

@@ -1,7 +1,9 @@
 "use server";
 
 import Booking from "@/database/booking.model";
+import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "../db";
+import { getCurrentUserFromMongoDB } from "./user.action";
 
 export const checkRoomAvailability = async ({
   roomId,
@@ -46,6 +48,24 @@ export const checkRoomAvailability = async ({
       };
     }
 
+    return {
+      success: true,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
+};
+
+export const bookRoom = async (payload: any) => {
+  try {
+    const userResponse = await getCurrentUserFromMongoDB();
+    payload.user = userResponse.data._id;
+    const booking = new Booking(payload);
+    await booking.save();
+    revalidatePath("/user/bookings");
     return {
       success: true,
     };
