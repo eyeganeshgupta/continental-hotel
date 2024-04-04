@@ -44,3 +44,18 @@ export interface RoomType {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface BookingType {
+  _id: string;
+  user: UserType;
+  room: RoomType;
+  hotel: HotelType;
+  checkInDate: string;
+  checkOutDate: string;
+  totalAmount: number;
+  totalDays: number;
+  paymentId: string;
+  bookingStatus: "Booked" | "Cancelled";
+  createdAt: string;
+  updatedAt: string;
+}

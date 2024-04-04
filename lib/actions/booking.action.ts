@@ -5,6 +5,17 @@ import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "../db";
 import { getCurrentUserFromMongoDB } from "./user.action";
 
+export const getAllUserBookings = async (userId: string) => {
+  const bookings = await Booking.find({
+    user: userId,
+  })
+    .populate("room")
+    .populate("hotel")
+    .sort({ createdAt: -1 });
+
+  return bookings;
+};
+
 export const checkRoomAvailability = async ({
   roomId,
   reqCheckInDate,

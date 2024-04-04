@@ -36,7 +36,7 @@ const RoomsData = async () => {
                 <hr className="border-gray-200 border border-solid" />
 
                 <div className="flex justify-between">
-                  <span>₹ {room.rentPerDay} / Per Day</span>
+                  <span>{room.rentPerDay} ₹ / Per Day</span>
                 </div>
               </div>
             </div>
