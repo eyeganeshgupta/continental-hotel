@@ -5,6 +5,8 @@ import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "../db";
 import { getCurrentUserFromMongoDB } from "./user.action";
 
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+
 export const getAllUserBookings = async (userId: string) => {
   const bookings = await Booking.find({
     user: userId,
@@ -87,3 +89,11 @@ export const bookRoom = async (payload: any) => {
     };
   }
 };
+
+export const cancelBooking = async ({
+  bookingId,
+  paymentId,
+}: {
+  bookingId: string;
+  paymentId: string;
+}) => {};

@@ -4,6 +4,7 @@ import { BookingType } from "@/lib/actions/shared.types";
 import { Table } from "antd";
 import dayjs from "dayjs";
 import React from "react";
+import CancelBookingModal from "../CancelBookingModal";
 
 function UserBookings({ bookings }: { bookings: any[] }) {
   const [showCancelBookingModal, setShowCancelBookingModal] =
@@ -86,6 +87,14 @@ function UserBookings({ bookings }: { bookings: any[] }) {
   return (
     <div>
       <Table dataSource={bookings} columns={columns} />
+
+      {showCancelBookingModal && selectedBooking && (
+        <CancelBookingModal
+          showCancelBookingModal={showCancelBookingModal}
+          setShowCancelBookingModal={setShowCancelBookingModal}
+          booking={selectedBooking}
+        />
+      )}
     </div>
   );
 }
