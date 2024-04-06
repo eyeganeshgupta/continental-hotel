@@ -96,4 +96,39 @@ export const cancelBooking = async ({
 }: {
   bookingId: string;
   paymentId: string;
-}) => {};
+}) => {
+  try {
+    connectToDatabase();
+
+    // ! change the status of the booking to cancelled
+    await Booking.findByIdAndUpdate(bookingId, {
+      bookingStatus: "Cancelled",
+    });
+
+    // ! refund the payment
+    const refund = await stripe.refunds.create({
+      payment_intent: paymentId,
+    });
+
+    if (refund.status !== "succeeded") {
+      return {
+        success: false,
+        message:
+          "Your booking has been cancelled but the refund failed. Please contact support for further assistance.",
+      };
+    }
+
+    revalidatePath("/user/bookings");
+
+    return {
+      success: true,
+      message:
+        "Your booking has been cancelled and the refund has been processed.",
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
+};
