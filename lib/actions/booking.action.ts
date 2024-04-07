@@ -7,6 +7,23 @@ import { getCurrentUserFromMongoDB } from "./user.action";
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
+export const getAllBookingsForAdmin = async () => {
+  try {
+    connectToDatabase();
+
+    const response = await Booking.find({})
+      .populate("hotel")
+      .populate("room")
+      .populate("user")
+      .sort({ createdAt: -1 });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export const getAllUserBookings = async (userId: string) => {
   const bookings = await Booking.find({
     user: userId,
