@@ -3,7 +3,7 @@ import { getAllRooms } from "@/lib/actions/room.action";
 import { RoomType } from "@/lib/actions/shared.types";
 import Link from "next/link";
 
-const RoomsData = async () => {
+const RoomsData = async ({ searchParams }: { searchParams: any }) => {
   const response = await getAllRooms();
   const rooms = JSON.parse(JSON.stringify(response));
 

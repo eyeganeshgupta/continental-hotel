@@ -2,12 +2,31 @@
 
 import { Button } from "antd";
 import { FilterX, Search } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React from "react";
 
-function Filters() {
-  const [checkIn, setCheckIn] = React.useState("");
-  const [checkOut, setCheckOut] = React.useState("");
-  const [type, setType] = React.useState("");
+function Filters({ searchParams }: { searchParams: any }) {
+  const router = useRouter();
+
+  const [checkIn, setCheckIn] = React.useState(searchParams.checkIn || "");
+  const [checkOut, setCheckOut] = React.useState(searchParams.checkOut || "");
+  const [type, setType] = React.useState(searchParams.type || "");
+
+  const onSearch = () => {
+    const newSearchParamsObject = { ...searchParams, checkIn, checkOut, type };
+    const newSearchParams = new URLSearchParams(
+      newSearchParamsObject
+    ).toString();
+
+    router.push(`/?${newSearchParams}`);
+  };
+
+  const onClear = () => {
+    setCheckIn("");
+    setCheckOut("");
+    setType("");
+    router.push("/");
+  };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-7 items-end">
@@ -51,6 +70,7 @@ function Filters() {
         <Button
           icon={<FilterX size={20} />}
           className="h-14 px-10 flex items-center"
+          onClick={onClear}
         >
           Clear
         </Button>
@@ -58,6 +78,7 @@ function Filters() {
           className="h-14 px-10 flex items-center"
           type="primary"
           icon={<Search size={20} />}
+          onClick={onSearch}
         >
           Search
         </Button>

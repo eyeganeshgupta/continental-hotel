@@ -6,9 +6,9 @@ import { Suspense } from "react";
 const Home = ({ searchParams }: { searchParams: any }) => {
   return (
     <div>
-      <Filters />
+      <Filters searchParams={searchParams} />
       <Suspense fallback={<Spinner />}>
-        <RoomsData />
+        <RoomsData searchParams={searchParams} />
       </Suspense>
     </div>
   );
