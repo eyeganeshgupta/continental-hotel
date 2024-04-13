@@ -4,10 +4,11 @@ import Spinner from "@/components/shared/Spinner";
 import { Suspense } from "react";
 
 const Home = ({ searchParams }: { searchParams: any }) => {
+  const suspenseKey = JSON.stringify(searchParams);
   return (
     <div>
       <Filters searchParams={searchParams} />
-      <Suspense fallback={<Spinner />}>
+      <Suspense fallback={<Spinner fullHeight />} key={suspenseKey}>
         <RoomsData searchParams={searchParams} />
       </Suspense>
     </div>

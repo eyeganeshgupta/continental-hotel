@@ -1,6 +1,7 @@
 "use server";
 
 import Booking from "@/database/booking.model";
+import Room from "@/database/room.model";
 import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "../db";
 import { getCurrentUserFromMongoDB } from "./user.action";
@@ -33,6 +34,74 @@ export const getAllUserBookings = async (userId: string) => {
     .sort({ createdAt: -1 });
 
   return bookings;
+};
+
+export const getAvailableRooms = async ({
+  reqCheckInDate,
+  reqCheckOutDate,
+  type,
+}: {
+  reqCheckInDate: string;
+  reqCheckOutDate: string;
+  type: string;
+}) => {
+  try {
+    connectToDatabase();
+
+    // ! if checkin date or checkout date is not valid return data only with type filter
+    if (!reqCheckInDate || !reqCheckOutDate) {
+      const rooms = await Room.find({
+        ...(type && { type }),
+      }).populate("hotel");
+      return {
+        success: true,
+        data: JSON.parse(JSON.stringify(rooms)),
+      };
+    }
+
+    // ! first get all the rooms which are booked in the given date range
+    const bookedSlots = await Booking.find({
+      bookingStatus: "Booked",
+      $or: [
+        {
+          checkInDate: {
+            $gte: reqCheckInDate,
+            $lte: reqCheckOutDate,
+          },
+        },
+        {
+          checkOutDate: {
+            $gte: reqCheckInDate,
+            $lte: reqCheckOutDate,
+          },
+        },
+        {
+          $and: [
+            { checkInDate: { $lte: reqCheckInDate } },
+            { checkOutDate: { $gte: reqCheckOutDate } },
+          ],
+        },
+      ],
+    });
+
+    const bookedRoomIds = bookedSlots.map((slot) => slot.room);
+
+    // ! get all the rooms by excluding the booked rooms
+    const rooms = await Room.find({
+      _id: { $nin: bookedRoomIds },
+      ...(type && { type }),
+    }).populate("hotel");
+
+    return {
+      success: true,
+      data: JSON.parse(JSON.stringify(rooms)),
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
 };
 
 export const checkRoomAvailability = async ({

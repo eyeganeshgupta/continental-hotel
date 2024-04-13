@@ -1,11 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
-import { getAllRooms } from "@/lib/actions/room.action";
+import { getAvailableRooms } from "@/lib/actions/booking.action";
 import { RoomType } from "@/lib/actions/shared.types";
 import Link from "next/link";
 
 const RoomsData = async ({ searchParams }: { searchParams: any }) => {
-  const response = await getAllRooms();
-  const rooms = JSON.parse(JSON.stringify(response));
+  const response = await getAvailableRooms({
+    reqCheckInDate: searchParams.checkIn || "",
+    reqCheckOutDate: searchParams.checkOut || "",
+    type: searchParams.type || "",
+  });
+
+  const rooms: RoomType[] = response.data;
 
   if (rooms.length === 0) {
     return <div>No Rooms Found!</div>;
