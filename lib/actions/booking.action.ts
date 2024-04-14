@@ -2,6 +2,7 @@
 
 import Booking from "@/database/booking.model";
 import Room from "@/database/room.model";
+import dayjs from "dayjs";
 import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "../db";
 import { getCurrentUserFromMongoDB } from "./user.action";
@@ -101,6 +102,32 @@ export const getAvailableRooms = async ({
       success: false,
       message: error.message,
     };
+  }
+};
+
+export const getBookingReport = async ({
+  startDate,
+  endDate,
+}: {
+  startDate: any;
+  endDate: any;
+}) => {
+  try {
+    const response = await Booking.find({
+      bookingStatus: "Booked",
+      createdAt: {
+        $gte: dayjs(startDate).startOf("day").toDate(),
+        $lte: dayjs(endDate).endOf("day").toDate(),
+      },
+    })
+      .populate("room")
+      .populate("user")
+      .populate("hotel");
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
   }
 };
 
