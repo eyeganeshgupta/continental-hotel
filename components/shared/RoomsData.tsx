@@ -12,13 +12,13 @@ const RoomsData = async ({ searchParams }: { searchParams: any }) => {
 
   const rooms: RoomType[] = response.data;
 
-  if (rooms.length === 0) {
+  if (rooms?.length === 0) {
     return <div>No Rooms Found!</div>;
   }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-      {rooms.map((room: RoomType) => {
+      {rooms?.map((room: RoomType) => {
         return (
           <Link
             href={`book-room/${room._id}`}

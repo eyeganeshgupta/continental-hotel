@@ -70,7 +70,9 @@ const Sidebar = ({ showSidebar, setShowSidebar, user }: any) => {
     },
   ];
 
-  const menuItemsToShow: any[] = user?.isAdmin ? adminMenuItems : userMenuItems;
+  const menuItemsToShow: any[] = JSON.parse(user)?.isAdmin
+    ? adminMenuItems
+    : userMenuItems;
 
   return (
     <Drawer open={showSidebar} onClose={() => setShowSidebar(false)} closable>
