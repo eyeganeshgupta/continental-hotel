@@ -1,6 +1,14 @@
 import { useAuth } from "@clerk/nextjs";
 import { Drawer } from "antd";
-import { BedDouble, GitGraph, Home, Hotel, List, User } from "lucide-react";
+import {
+  BedDouble,
+  GitGraph,
+  Home,
+  Hotel,
+  List,
+  User,
+  User2,
+} from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 const Sidebar = ({ showSidebar, setShowSidebar, user }: any) => {
@@ -63,6 +71,12 @@ const Sidebar = ({ showSidebar, setShowSidebar, user }: any) => {
       isActive: pathname.includes("/admin/rooms"),
     },
     {
+      name: "Users",
+      icon: <User2 size={iconSize} />,
+      onClick: () => router.push("/admin/users"),
+      isActive: pathname.includes("/admin/users"),
+    },
+    {
       name: "Reports",
       icon: <GitGraph size={iconSize} />,
       onClick: () => router.push("/admin/reports"),
@@ -76,7 +90,7 @@ const Sidebar = ({ showSidebar, setShowSidebar, user }: any) => {
 
   return (
     <Drawer open={showSidebar} onClose={() => setShowSidebar(false)} closable>
-      <div className="flex flex-col gap-14">
+      <div className="flex flex-col gap-10">
         {menuItemsToShow.map((item, index) => {
           return (
             <div

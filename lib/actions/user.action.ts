@@ -63,6 +63,17 @@ export const getCurrentUserFromMongoDB = async () => {
   }
 };
 
+export async function getAllUsers() {
+  try {
+    await connectToDatabase();
+    const allUsers = await User.find().sort({ createdAt: -1 });
+    return allUsers;
+  } catch (error: any) {
+    console.log(error.message);
+    throw error;
+  }
+}
+
 export async function createUser(userData: CreateUserParams) {
   try {
     await connectToDatabase();
@@ -88,6 +99,31 @@ export async function updateUser(params: any) {
     throw error;
   }
 }
+
+export const updateUserRole = async (userId: string, isAdmin: boolean) => {
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return {
+        success: false,
+        message: "User not found",
+      };
+    }
+    user.isAdmin = isAdmin;
+    await user.save();
+    revalidatePath("/admin/users");
+    return {
+      success: true,
+      message: "User role updated successfully",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error,
+      message: "Error while updating user role",
+    };
+  }
+};
 
 export async function deleteUser(params: any) {
   try {
