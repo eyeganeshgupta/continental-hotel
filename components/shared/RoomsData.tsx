@@ -10,6 +10,8 @@ const RoomsData = async ({ searchParams }: { searchParams: any }) => {
     type: searchParams.type || "",
   });
 
+  console.log(response);
+
   const rooms: RoomType[] = response.data;
 
   if (rooms?.length === 0) {

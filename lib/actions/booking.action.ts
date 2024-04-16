@@ -1,6 +1,7 @@
 "use server";
 
 import Booking from "@/database/booking.model";
+import Hotel from "@/database/hotel.model";
 import Room from "@/database/room.model";
 import dayjs from "dayjs";
 import { revalidatePath } from "next/cache";
@@ -30,8 +31,8 @@ export const getAllUserBookings = async (userId: string) => {
   const bookings = await Booking.find({
     user: userId,
   })
-    .populate("room")
     .populate("hotel")
+    .populate("room")
     .sort({ createdAt: -1 });
 
   return bookings;
@@ -53,7 +54,12 @@ export const getAvailableRooms = async ({
     if (!reqCheckInDate || !reqCheckOutDate) {
       const rooms = await Room.find({
         ...(type && { type }),
-      }).populate("hotel");
+      }).populate({
+        path: "hotel",
+        model: Hotel,
+        select: "_id name",
+      });
+
       return {
         success: true,
         data: JSON.parse(JSON.stringify(rooms)),
