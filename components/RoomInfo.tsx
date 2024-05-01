@@ -26,7 +26,7 @@ const RoomInfo = ({ room }: { room: RoomType }) => {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-7 mt-7 capitalize">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-7 mt-7">
         {renderRoomProperty("Room Name", room.name)}
         {renderRoomProperty("Room Type", room.type)}
         {renderRoomProperty("Room Number", room.roomNumber.toString())}

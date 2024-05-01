@@ -11,7 +11,7 @@ export const getRoomById = async (RoomId: string) => {
     const response = await Room.findById(RoomId).populate({
       path: "hotel",
       model: Hotel,
-      select: "_id name",
+      select: "_id name owner email phone",
     });
     return response;
   } catch (error) {
