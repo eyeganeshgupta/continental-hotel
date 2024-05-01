@@ -19,7 +19,7 @@ const RoomsData = async ({ searchParams }: { searchParams: any }) => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 mb-8">
       {rooms?.map((room: RoomType) => {
         return (
           <Link

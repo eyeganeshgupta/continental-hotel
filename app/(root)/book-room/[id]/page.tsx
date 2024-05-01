@@ -22,7 +22,7 @@ const BookRoomPage = async ({
         <span className="text-gray-500 text-sm">{room.hotel.address}</span>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 mt-10">
+      <div className="grid grid-cols-1 lg:grid-cols-3 mt-10 gap-10 mb-10">
         <div className="col-span-2">
           <RoomInfo room={room} />
         </div>
