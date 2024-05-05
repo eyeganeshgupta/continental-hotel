@@ -57,7 +57,7 @@ export const getAvailableRooms = async ({
       }).populate({
         path: "hotel",
         model: Hotel,
-        select: "_id name",
+        select: "_id name address",
       });
 
       return {

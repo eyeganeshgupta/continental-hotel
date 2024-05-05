@@ -37,7 +37,10 @@ const RoomsData = async ({ searchParams }: { searchParams: any }) => {
               <div className="px-3 py-2 flex flex-col text-sm gap-2">
                 <span>{room.name}</span>
                 <span className="text-gray-500 text-xs">
-                  {room.hotel.name} - {room.hotel.address}
+                  {(room.hotel.name + " - " + room.hotel.address).substring(
+                    0,
+                    63
+                  ) + "..."}
                 </span>
 
                 <hr className="border-gray-200 border border-solid" />
